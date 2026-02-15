@@ -1,0 +1,13 @@
+image:
+  repository: opsguardian
+  tag: "v1"
+  pullPolicy: Never
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 80
+
+env:
+  targetPort: 8000
