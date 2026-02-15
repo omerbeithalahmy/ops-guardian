@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.git
+*.md
+cleanup.py
+ebs.py
+ec2.py
