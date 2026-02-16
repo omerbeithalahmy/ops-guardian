@@ -1,7 +1,10 @@
 image:
   repository: opsguardian
-  tag: "v1"
+  tag: "v2"
   pullPolicy: Never
+
+slack:
+  webhookUrl: ""
 
 replicaCount: 1
 
