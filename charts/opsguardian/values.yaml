@@ -1,6 +1,6 @@
 image:
   repository: omerbh7/opsguardian
-  tag: "v11"
+  tag: "v14"
   pullPolicy: Always
 
 slack:
