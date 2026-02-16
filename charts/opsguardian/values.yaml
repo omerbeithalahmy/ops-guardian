@@ -1,7 +1,7 @@
 image:
-  repository: opsguardian
-  tag: "v2"
-  pullPolicy: Never
+  repository: omerbh7/opsguardian
+  tag: "v11"
+  pullPolicy: Always
 
 slack:
   webhookUrl: ""
