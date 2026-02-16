@@ -17,5 +17,12 @@ cronjob:
   schedule: "*/2 * * * *"
   dryRun: true
 
+aws:
+  accessKey: ""
+  secretKey: ""
+
+slack:
+  webhookUrl: ""
+
 env:
   targetPort: 8000
