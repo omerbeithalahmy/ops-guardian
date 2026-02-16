@@ -1,0 +1,23 @@
+{{- if .Values.cronjob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-scheduler
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: trigger
+            image: curlimages/curl:latest
+            imagePullPolicy: IfNotPresent
+            args:
+            - /bin/sh
+            - -c
+            - |
+              echo "Triggering scheduled cleanup..."
+              curl -X POST "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/cleanup/volumes?dry_run={{ .Values.cronjob.dryRun }}" || true
+          restartPolicy: OnFailure
+{{- end}}
