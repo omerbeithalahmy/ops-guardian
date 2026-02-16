@@ -12,5 +12,10 @@ service:
   type: ClusterIP
   port: 80
 
+cronjob:
+  enabled: true
+  schedule: "*/2 * * * *"
+  dryRun: true
+
 env:
   targetPort: 8000
