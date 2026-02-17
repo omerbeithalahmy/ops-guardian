@@ -18,6 +18,6 @@ spec:
             - -c
             - |
               echo "Triggering scheduled cleanup..."
-              curl -X POST "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/cleanup/volumes?dry_run={{ .Values.cronjob.dryRun }}" || true
+              curl -X POST "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/volumes/cleanup?dry_run={{ .Values.cronjob.dryRun }}" || true
           restartPolicy: OnFailure
 {{- end}}
