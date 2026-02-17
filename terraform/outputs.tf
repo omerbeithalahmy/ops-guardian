@@ -42,3 +42,8 @@ output "github_role_arn" {
     description = "Role ARN for GitHub Actions"
     value = aws_iam_role.github_actions.arn
 }
+
+output "opsguardian_role_arn" {
+    description = "Role ARN"
+    value = module.opsguardian_irsa_role.iam_role_arn
+}
