@@ -26,3 +26,8 @@ slack:
 
 env:
   targetPort: 8000
+
+serviceAccount:
+  create: true
+  name: "opsguardian-sa"
+  annotations: {}
