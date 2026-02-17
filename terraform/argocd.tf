@@ -12,54 +12,53 @@ resource "helm_release" "argocd" {
     name  = "server.service.type"
     value = "LoadBalancer"
   }
-  
+
   set {
     name  = "server.extraArgs"
     value = "{--insecure}"
   }
+}
 
-  values = [
-    yamlencode({
-      server = {
-        extraObjects = [
-          {
-            apiVersion = "argoproj.io/v1alpha1"
-            kind       = "Application"
-            metadata = {
-              name      = "opsguardian"
-              namespace = "argocd"
+resource "kubernetes_manifest" "opsguardian_application" {
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "opsguardian"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = "https://github.com/${var.github_repo}.git"
+        targetRevision = "main"
+        path           = "charts/opsguardian"
+        helm = {
+          parameters = [
+            {
+              name  = "slack.webhookUrl"
+              value = var.slack_webhook_url
+            },
+            {
+              name  = "serviceAccount.roleArn"
+              value = module.opsguardian_irsa_role.iam_role_arn
             }
-            spec = {
-              project = "default"
-              source = {
-                repoURL        = "https://github.com/${var.github_repo}.git"
-                targetRevision = "main"
-                path           = "charts/opsguardian"
-
-                helm = {
-                  parameters = [
-                    {
-                      name = "slack.webhookUrl"
-                      value = var.slack_webhook_url
-                    }
-                  ]
-                }
-              }
-              destination = {
-                server    = "https://kubernetes.default.svc"
-                namespace = "default"
-              }
-              syncPolicy = {
-                automated = {
-                  prune    = true
-                  selfHeal = true
-                }
-                syncOptions = ["CreateNamespace=true"]
-              }
-            }
-          }
-        ]
+          ]
+        }
       }
-    })
-  ]
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "default"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+        syncOptions = ["CreateNamespace=true"]
+      }
+    }
+  }
+
+  depends_on = [helm_release.argocd]
 }

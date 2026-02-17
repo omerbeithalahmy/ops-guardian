@@ -17,14 +17,11 @@ cronjob:
   schedule: "*/2 * * * *"
   dryRun: true
 
-
-slack:
-  webhookUrl: ""
-
 env:
   targetPort: 8000
 
 serviceAccount:
   create: true
   name: "opsguardian-sa"
+  roleArn: ""
   annotations: {}
