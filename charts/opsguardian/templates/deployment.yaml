@@ -12,7 +12,10 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ include "opsguardian.name" . }}
+        app.kubernetes.io/name: {{ include "opsguardian.name" . }}
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       securityContext:
