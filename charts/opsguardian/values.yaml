@@ -1,6 +1,6 @@
 image:
-  repository: omerbh7/opsguardian
-  tag: "v14"
+  repository: 279987127424.dkr.ecr.us-east-1.amazonaws.com/opsguardian
+  tag: "ddd0186e"
   pullPolicy: Always
 
 slack:
