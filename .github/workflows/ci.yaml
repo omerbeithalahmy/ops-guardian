@@ -3,8 +3,13 @@ name: OpsGuardian CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    paths-ignore:
+      - 'charts/**'
+      - 'README.md'
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
 
@@ -31,21 +36,28 @@ jobs:
         flake8 . --count --select=E9,F63,F3,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
-    - name: Login to Docker Hub
-      if: github.even_name != 'pull_request'
-      uses: docker/login-action@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        role-to-assume: arn:aws:iam::279987127424:role/github-actions-opsguardian-role
+        aws-region: us-east-1
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Get Short SHA
+      id: slug
+      run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     
-    - name: Build and push Docker image
-      if: github.event_name != 'pull_request'
+    - name: Build and push to ECR
       uses: docker/build-push-action@v4
       with:
         context: .
-        platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/opsguardian:latest, ${{ secrets.DOCKER_USERNAME }}/opsguardian:v${{ github.run_number }}
+        tags: |
+          ${{ steps.login-ecr.outputs.registry }}/opsguardian:latest
+          ${{ steps.login-ecr.outputs.registry }}/opsguardian:${{ steps.slug.outputs.sha8 }}
