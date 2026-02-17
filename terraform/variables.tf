@@ -32,5 +32,10 @@ variable "github_repo" {
     description = "GitHub repository name"
     type = string
     default = "omerbeithalahmy/ops-guardian"
-  
+}
+
+variable "slack_webhook_url" {
+    description = "The Slack Webhook URL"
+    type = string
+    sensitive = true
 }

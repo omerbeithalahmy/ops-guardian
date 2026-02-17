@@ -35,6 +35,15 @@ resource "helm_release" "argocd" {
                 repoURL        = "https://github.com/${var.github_repo}.git"
                 targetRevision = "main"
                 path           = "charts/opsguardian"
+
+                helm = {
+                  parameters = [
+                    {
+                      name = "slack.webhookUrl"
+                      value = var.slack_webhook_url
+                    }
+                  ]
+                }
               }
               destination = {
                 server    = "https://kubernetes.default.svc"
