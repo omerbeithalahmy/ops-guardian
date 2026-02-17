@@ -58,6 +58,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: |
-          ${{ steps.login-ecr.outputs.registry }}/opsguardian:latest
-          ${{ steps.login-ecr.outputs.registry }}/opsguardian:${{ steps.slug.outputs.sha8 }}
+        tags: ${{ steps.login-ecr.outputs.registry }}/opsguardian:${{ steps.slug.outputs.sha8 }}
