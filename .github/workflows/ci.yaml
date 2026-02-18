@@ -36,6 +36,10 @@ jobs:
         flake8 app/ --count --select=E9,F63,F3,F82 --show-source --statistics
         flake8 app/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
+    - name: Run automated tests
+      run: |
+        bash app/tests/run_tests.sh
+    
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
