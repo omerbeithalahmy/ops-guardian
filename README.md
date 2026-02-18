@@ -63,9 +63,6 @@ OpsGuardian implements a **Zero-Secret Architecture** for AWS access. It uses **
 ```
 
 #### 🧬 Detailed Sequence (Mermaid)
-> [!TIP]
-> Viewing on GitHub? The diagram below will automatically render into a beautiful graphical sequence!
-
 ```mermaid
 sequenceDiagram
     participant U as Slack User
@@ -212,6 +209,3 @@ Every release is validated by a dedicated test suite:
 *   [External Secrets Operator](https://external-secrets.io/)
 
 ---
-
-> [!NOTE]
-> **OpsGuardian** is designed for the modern DevOps team. It moves cloud governance from a spreadsheet to the conversation, ensuring that your AWS account stays lean, clean, and secure. 🛡️🚀🦾
