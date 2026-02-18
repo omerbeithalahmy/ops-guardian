@@ -1,6 +1,6 @@
 image:
   repository: 279987127424.dkr.ecr.us-east-1.amazonaws.com/opsguardian
-  tag: "cb6f4897"
+  tag: "65205229"
   pullPolicy: Always
 
 awsRegion: "us-east-1"
