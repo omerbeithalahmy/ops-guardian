@@ -17,7 +17,9 @@ spec:
             - /bin/sh
             - -c
             - |
-              echo "Triggering scheduled cleanup..."
-              curl -X POST "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/volumes/cleanup?dry_run={{ .Values.cronjob.dryRun }}" || true
+              curl -X GET "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/scan/costs" || true
+              curl -X GET "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/scan/security" || true
+              curl -X GET "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/scan/hygiene" || true
+              curl -X GET "http://{{ .Release.Name }}-service:{{ .Values.service.port }}/scan/network" || true
           restartPolicy: OnFailure
 {{- end}}
