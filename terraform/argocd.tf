@@ -1,3 +1,14 @@
+resource "helm_release" "external_secrets" {
+  name             = "external-secrets"
+  repository       = "https://charts.external-secrets.io"
+  chart            = "external-secrets"
+  namespace        = "external-secrets"
+  create_namespace = true
+  version          = "0.9.11"
+
+  depends_on = [module.eks]
+}
+
 resource "helm_release" "argocd" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
@@ -56,5 +67,5 @@ resource "kubernetes_manifest" "opsguardian_application" {
     }
   }
 
-  depends_on = [helm_release.argocd]
+  depends_on = [helm_release.argocd, helm_release.external_secrets]
 }

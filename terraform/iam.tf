@@ -38,6 +38,14 @@ resource "aws_iam_policy" "opsguardian_policy" {
           "iam:ListMFADevices"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "SecretsManagerReadOnly"
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = "arn:aws:secretsmanager:*:*:secret:opsguardian/*"
       }
     ]
   })
