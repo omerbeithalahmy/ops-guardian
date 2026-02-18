@@ -51,7 +51,7 @@ OpsGuardian implements a **Zero-Secret Architecture** for AWS access. It uses **
 
 ### Interaction & Remediation Flow
 
-#### 📊 Logical Flow (ASCII Fallback)
+#### 📊 Logical Flow 
 ```text
 [ USER ] -- /opsguardian --> [ SLACK ] -- payload --> [ BOT (FastAPI) ]
                                                             |
@@ -62,7 +62,7 @@ OpsGuardian implements a **Zero-Secret Architecture** for AWS access. It uses **
     [ SLACK ] <--- update status --- [ RESOURCE DELETED ] <+
 ```
 
-#### 🧬 Detailed Sequence (Mermaid)
+#### 🧬 Detailed Sequence
 ```mermaid
 sequenceDiagram
     participant U as Slack User
