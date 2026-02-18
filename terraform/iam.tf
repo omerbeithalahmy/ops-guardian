@@ -6,9 +6,14 @@ resource "aws_iam_policy" "opsguardian_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "EC2ReadOnly"
+        Sid    = "EC2Remediation"
         Effect = "Allow"
         Action = [
+          "ec2:DeleteVolume",
+          "ec2:ReleaseAddress",
+          "ec2:TerminateInstances",
+          "ec2:DeleteSecurityGroup",
+          "ec2:DeleteVpc",
           "ec2:DescribeVolumes",
           "ec2:DescribeAddresses",
           "ec2:DescribeInstances",
@@ -21,21 +26,23 @@ resource "aws_iam_policy" "opsguardian_policy" {
         Resource = "*"
       },
       {
-        Sid    = "S3ReadOnly"
+        Sid    = "S3Remediation"
         Effect = "Allow"
         Action = [
           "s3:ListAllMyBuckets",
           "s3:GetBucketAcl",
-          "s3:GetBucketVersioning"
+          "s3:GetBucketVersioning",
+          "s3:DeleteBucket"
         ]
         Resource = "*"
       },
       {
-        Sid    = "IAMReadOnly"
+        Sid    = "IAMRemediation"
         Effect = "Allow"
         Action = [
           "iam:ListUsers",
-          "iam:ListMFADevices"
+          "iam:ListMFADevices",
+          "iam:DeleteUser"
         ]
         Resource = "*"
       },

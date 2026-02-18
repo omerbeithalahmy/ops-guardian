@@ -3,34 +3,24 @@ from app.services import aws, slack
 
 router = APIRouter(prefix="/scan/hygiene", tags=["Hygiene"])
 
-@router.get("")
-def scan_hygiene():
+def get_hygiene_resources():
     untagged = aws.scan_untagged_instances()
     no_versioning = aws.scan_s3_buckets_without_versioning()
     stale_users = aws.scan_stale_iam_users()
 
-    issues = []
+    all_resources = []
+    for i in untagged:
+        all_resources.append({"id": i['id'], "display": f"Instance {i['id']} (Untagged)", "type": "instance"})
+    for b in no_versioning:
+        all_resources.append({"id": b['name'], "display": f"S3 Bucket {b['name']} (No Versioning)", "type": "s3"})
+    for u in stale_users:
+        all_resources.append({"id": u['username'], "display": f"IAM User {u['username']} (Stale)", "type": "iam"})
+    
+    return all_resources
 
-    if untagged:
-        instance_list = ", ".join(f"`{i['id']}`" for i in untagged)
-        issues.append(f"*Untagged Instances*: {len(untagged)} found ({instance_list})")
-
-    if no_versioning:
-        bucket_list = ", ".join(f"`{b['name']}`" for b in no_versioning)
-        issues.append(f"*S3 Without Versioning*: {len(no_versioning)} buckets ({bucket_list})")
-
-    if stale_users:
-        user_list = ", ".join(f"`{u['username']}`" for u in stale_users)
-        issues.append(f"*Stale IAM Users (90+ days)*: {len(stale_users)} found ({user_list})")
-
-    if issues:
-        msg = "*OpsGuardian Hygiene Report*\n" + "\n".join(f"- {i}" for i in issues)
-        slack.send_alert(msg, color="#439fe0")
-    else:
-        slack.send_alert("*OpsGuardian Hygiene Report*\nNo hygiene issues found.", color="#36a64f")
-
-    return {
-        "untagged_instances": untagged,
-        "s3_without_versioning": no_versioning,
-        "stale_iam_users": stale_users
-    }
+@router.get("")
+def scan_hygiene():
+    resources = get_hygiene_resources()
+    blocks = slack.get_remediation_blocks("hygiene", resources)
+    slack.send_block_message(blocks)
+    return {"resources": resources}
