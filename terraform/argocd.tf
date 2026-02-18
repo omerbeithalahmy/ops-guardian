@@ -30,42 +30,38 @@ resource "helm_release" "argocd" {
   }
 }
 
-resource "kubernetes_manifest" "opsguardian_application" {
-  manifest = {
-    apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
-    metadata = {
-      name      = "opsguardian"
-      namespace = "argocd"
-    }
-    spec = {
-      project = "default"
-      source = {
-        repoURL        = "https://github.com/${var.github_repo}.git"
-        targetRevision = "main"
-        path           = "charts/opsguardian"
-        helm = {
-          parameters = [
-            {
-              name  = "serviceAccount.roleArn"
-              value = module.opsguardian_irsa_role.iam_role_arn
-            }
-          ]
-        }
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = "default"
-      }
-      syncPolicy = {
-        automated = {
-          prune    = true
-          selfHeal = true
-        }
-        syncOptions = ["CreateNamespace=true"]
-      }
-    }
+resource "null_resource" "opsguardian_application" {
+  provisioner "local-exec" {
+    command = <<EOF
+aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}
+cat <<APP | kubectl apply -f -
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opsguardian
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/${var.github_repo}.git
+    targetRevision: main
+    path: charts/opsguardian
+    helm:
+      parameters:
+        - name: serviceAccount.roleArn
+          value: "${module.opsguardian_irsa_role.iam_role_arn}"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+APP
+EOF
   }
 
-  depends_on = [helm_release.argocd, helm_release.external_secrets]
+  depends_on = [helm_release.argocd, helm_release.external_secrets, module.opsguardian_irsa_role]
 }
