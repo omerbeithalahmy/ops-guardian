@@ -36,10 +36,6 @@ resource "kubernetes_manifest" "opsguardian_application" {
         helm = {
           parameters = [
             {
-              name  = "slack.webhookUrl"
-              value = var.slack_webhook_url
-            },
-            {
               name  = "serviceAccount.roleArn"
               value = module.opsguardian_irsa_role.iam_role_arn
             }

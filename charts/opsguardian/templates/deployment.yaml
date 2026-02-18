@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
-  labels: 
+  labels:
     app: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -14,8 +14,6 @@ spec:
       labels:
         app: {{ include "opsguardian.name" . }}
         app.kubernetes.io/name: {{ include "opsguardian.name" . }}
-      annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       securityContext:
@@ -28,10 +26,7 @@ spec:
         - containerPort: {{ .Values.env.targetPort }}
         env:
         - name: AWS_DEFAULT_REGION
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-secret
-              key: AWS_DEFAULT_REGION
+          value: {{ .Values.awsRegion }}
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:

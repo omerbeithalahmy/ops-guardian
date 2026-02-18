@@ -1,41 +1,35 @@
 variable "region" {
-    description = "AWS region"
-    type = string
-    default = "us-east-1"
+  description = "AWS region"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "repo_name" {
-    description = "Name of the ECR repository"
-    type = string
-    default = "opsguardian"
+  description = "Name of the ECR repository"
+  type        = string
+  default     = "opsguardian"
 }
 
 variable "vpc_name" {
-    description = "Name of the VPC"
-    type = string
-    default = "opsguardian-vpc"
+  description = "Name of the VPC"
+  type        = string
+  default     = "opsguardian-vpc"
 }
 
 variable "vpc_cidr" {
-    description = "CIDR block for the VPC"
-    type = string
-    default = "10.0.0.0/16"
+  description = "CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
 }
 
 variable "cluster_name" {
-    description = "Name of the EKS cluster"
-    type = string
-    default = "opsguardian-cluster"
+  description = "Name of the EKS cluster"
+  type        = string
+  default     = "opsguardian-cluster"
 }
 
 variable "github_repo" {
-    description = "GitHub repository name"
-    type = string
-    default = "omerbeithalahmy/ops-guardian"
-}
-
-variable "slack_webhook_url" {
-    description = "The Slack Webhook URL"
-    type = string
-    sensitive = true
+  description = "GitHub repository name"
+  type        = string
+  default     = "omerbeithalahmy/ops-guardian"
 }
