@@ -32,3 +32,18 @@ spec:
             secretKeyRef:
               name: {{ include "opsguardian.fullname" . }}-secret
               key: SLACK_WEBHOOK_URL
+        - name: SLACK_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "opsguardian.fullname" . }}-secret
+              key: SLACK_BOT_TOKEN
+        - name: SLACK_APP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "opsguardian.fullname" . }}-secret
+              key: SLACK_APP_TOKEN
+        - name: SLACK_CHANNEL_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "opsguardian.fullname" . }}-secret
+              key: SLACK_CHANNEL_ID
