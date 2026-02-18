@@ -3,8 +3,7 @@ image:
   tag: "364e59f6"
   pullPolicy: Always
 
-slack:
-  webhookUrl: ""
+awsRegion: "us-east-1"
 
 replicaCount: 1
 
