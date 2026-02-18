@@ -3,34 +3,24 @@ from app.services import aws, slack
 
 router = APIRouter(prefix="/scan/costs", tags=["Costs"])
 
-@router.get("")
-def scan_costs():
+def get_costs_resources():
     volumes = aws.scan_unattached_volumes()
     eips = aws.scan_unused_elastic_ips()
     stopped = aws.scan_stopped_instances()
 
-    issues = []
+    all_resources = []
+    for v in volumes:
+        all_resources.append({"id": v['id'], "display": f"Volume {v['id']} ({v['size_gb']}GB)", "type": "volume"})
+    for e in eips:
+        all_resources.append({"id": e['allocation_id'], "display": f"Elastic IP {e['ip']}", "type": "eip"})
+    for i in stopped:
+        all_resources.append({"id": i['id'], "display": f"Instance {i['id']} (Stopped)", "type": "instance"})
+    
+    return all_resources
 
-    if volumes:
-        total_gb = sum(v['size_gb'] for v in volumes)
-        issues.append(f"*Unattached Volumes*: {len(volumes)} found, {total_gb}GB wasted")
-
-    if eips:
-        eip_list = ", ".join(f"`{e['ip']}`" for e in eips)
-        issues.append(f"*Unused Elastic IPs*: {len(eips)} found ({eip_list})")
-
-    if stopped:
-        instance_list = ", ".join(f"`{i['id']}`" for i in stopped)
-        issues.append(f"*Stopped Instances*: {len(stopped)} found ({instance_list})")
-
-    if issues:
-        msg = "*OpsGuardian Cost Report*\n" + "\n".join(f"- {i}" for i in issues)
-        slack.send_alert(msg, color="#ff9900")
-    else:
-        slack.send_alert("*OpsGuardian Cost Report*\nNo cost issues found.", color="#36a64f")
-
-    return {
-        "unattached_volumes": volumes,
-        "unused_elastic_ips": eips,
-        "stopped_instances": stopped
-    }
+@router.get("")
+def scan_costs():
+    resources = get_costs_resources()
+    blocks = slack.get_remediation_blocks("costs", resources)
+    slack.send_block_message(blocks)
+    return {"resources": resources}
