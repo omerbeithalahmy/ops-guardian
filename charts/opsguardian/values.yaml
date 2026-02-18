@@ -20,6 +20,8 @@ cronjob:
 env:
   targetPort: 8000
 
+podSecurityContext: {}
+
 serviceAccount:
   create: true
   name: "opsguardian-sa"
