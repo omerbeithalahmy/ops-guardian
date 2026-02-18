@@ -56,7 +56,7 @@ jobs:
     - name: Build and push to ECR
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: app
         push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/opsguardian:${{ steps.slug.outputs.sha8 }}
     
