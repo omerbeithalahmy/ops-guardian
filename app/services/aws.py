@@ -57,7 +57,8 @@ def scan_public_s3_buckets():
                 if grant.get('Grantee', {}).get('URI') == 'http://acs.amazonaws.com/groups/global/AllUsers':
                     public_buckets.append({"name": name, "type": "s3"})
                     break
-        except: pass
+        except Exception:
+            pass
     return public_buckets
 
 def scan_iam_users_without_mfa():
@@ -88,7 +89,8 @@ def scan_s3_buckets_without_versioning():
         try:
             if client.get_bucket_versioning(Bucket=name).get('Status') != 'Enabled':
                 no_versioning.append({"name": name, "type": "s3"})
-        except: pass
+        except Exception:
+            pass
     return no_versioning
 
 def scan_stale_iam_users():
