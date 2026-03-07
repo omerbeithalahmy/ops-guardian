@@ -18,30 +18,19 @@ OpsGuardian acts as an **Active Self-Healing Layer** for your AWS infrastructure
 
 ---
 
+## 🎬 Live Demo
+
+> Scanning a live AWS environment and remediating findings in real-time from Slack:
+
+https://github.com/omerbeithalahmy/ops-guardian/raw/main/assets/demo.mov
+
+---
+
 ## 🏗️ Architecture
 
-### Infrastructure Architecture (Terraform)
-The following diagram describes the multi-tier VPC and EKS layout managed by Terraform.
+### System Architecture
 
-```text
-┌─────────────────────────────────────────────────────┐
-│  AWS Cloud (Region: us-east-1)                      │
-│  └─ Virtual Private Cloud (VPC)                     │
-│     ├─ Public Subnets (NAT Gateway, ALB)            │
-│     └─ Private Subnets (EKS Managed Nodes)          │
-└─────────────────────────────────────────────────────┘
-                        │
-                        ↓ (Provisioned via Terraform)
-┌─────────────────────────────────────────────────────┐
-│  Kubernetes Cluster (AWS EKS)                       │
-│                                                     │
-│  Helm Addons ─→ ArgoCD, External Secrets Operator    │
-│                                                     │
-│  Secrets Manager ─→ Stores Slack Tokens             │
-│              ↓                                      │
-│         OIDC / IRSA Keyless Auth                    │
-└─────────────────────────────────────────────────────┘
-```
+![OpsGuardian Architecture](assets/architecture.jpg)
 
 ### Identity & Security Model (IRSA)
 OpsGuardian implements a **Zero-Secret Architecture** for AWS access. It uses **IAM Roles for Service Accounts (IRSA)**:
