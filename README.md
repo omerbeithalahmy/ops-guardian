@@ -22,7 +22,7 @@ OpsGuardian acts as an **Active Self-Healing Layer** for your AWS infrastructure
 
 > Scanning a live AWS environment and remediating findings in real-time from Slack:
 
-<video src="https://github.com/omerbeithalahmy/ops-guardian/raw/main/assets/demo.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/f10f154d-3a16-44a0-8bef-b962c35dd965
 
 ---
 
