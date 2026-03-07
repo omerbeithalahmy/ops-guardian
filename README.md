@@ -30,7 +30,7 @@ https://github.com/user-attachments/assets/f10f154d-3a16-44a0-8bef-b962c35dd965
 
 ### System Architecture
 
-![OpsGuardian Architecture](assets/architecture.jpg)
+![OpsGuardian Architecture](assets/architecture.png)
 
 ### Identity & Security Model (IRSA)
 OpsGuardian implements a **Zero-Secret Architecture** for AWS access. It uses **IAM Roles for Service Accounts (IRSA)**:
